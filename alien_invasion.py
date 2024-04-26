@@ -1,6 +1,8 @@
 import sys
 import pygame
 
+from settings import Settings
+
 #———————————————————————————————————————————————————————————————————————————————
 #———————————————————————————————————————————————————————————————————————————————
 class AlienInvasion:
@@ -10,14 +12,16 @@ class AlienInvasion:
 	def __init__(self):
 		"""Initialize the game, and create game resources."""
 
-		pygame.init()		# initialize Pygame background settings
+		pygame.init()				# initialize all imported Pygame modules
+		self.settings = Settings()	# create instance of Settings & assign it to 'self.settings'
 
-		self.screen = pygame.display.set_mode((1200, 800))	# create display window (surface) &
-															# assign to class attribute 'self.screen'
-															# surface display.set_mode() returns is entire game window
+		self.screen = pygame.display.set_mode(
+			(self.settings.screenWidth, self.settings.screenHeight))	# create display window (surface) &
+																		# assign to class attribute 'self.screen'
+																		# surface display.set_mode() returns is entire game window
 		pygame.display.set_caption("Alien Invasion")
 
-		self.bgColor = (230, 230, 230)						# set background color
+		self.bgColor = (self.settings.bgColor)						# set background color
 
 	########################################
 	def run_game(self):
