@@ -17,6 +17,8 @@ class AlienInvasion:
 															# surface display.set_mode() returns is entire game window
 		pygame.display.set_caption("Alien Invasion")
 
+		self.bgColor = (230, 230, 230)						# set background color
+
 	########################################
 	def run_game(self):
 		"""Start the main loop for the game."""
@@ -29,6 +31,8 @@ class AlienInvasion:
 												# taken place since last time this function was called
 				if event.type == pygame.QUIT:	# player clicked window's close button, detect pygame.QUIT event
 					sys.exit()					# exit the game
+
+			self.screen.fill(self.bgColor)		# redraw screen during each pass through loop
 
 			# Make the most recently drawn screen visible.
 			# Update display to show new positions of game elements & hide
