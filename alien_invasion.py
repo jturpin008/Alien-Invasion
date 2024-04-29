@@ -2,6 +2,7 @@ import sys
 import pygame
 
 from settings import Settings
+from ship import Ship
 
 #———————————————————————————————————————————————————————————————————————————————
 #———————————————————————————————————————————————————————————————————————————————
@@ -21,7 +22,11 @@ class AlienInvasion:
 																		# surface display.set_mode() returns is entire game window
 		pygame.display.set_caption("Alien Invasion")
 
-		self.bgColor = (self.settings.bgColor)						# set background color
+		self.bgColor = (self.settings.bgColor)	# set background color
+		self.ship = Ship(self)					# Make instance of Ship after screen has been created
+												# passing instance of AlienInvasion as an argument.
+												# This parameter gives Ship access to game's resources like the screen object.
+												# Assign this Ship instance to AlienInvasion's Ship attribute.
 
 	########################################
 	def run_game(self):
@@ -37,6 +42,8 @@ class AlienInvasion:
 					sys.exit()					# exit the game
 
 			self.screen.fill(self.bgColor)		# redraw screen during each pass through loop
+			self.ship.blitme()					# After filling background, place image of ship
+												# on top of background.
 
 			# Make the most recently drawn screen visible.
 			# Update display to show new positions of game elements & hide
