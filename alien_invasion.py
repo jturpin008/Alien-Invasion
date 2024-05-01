@@ -33,22 +33,33 @@ class AlienInvasion:
 		"""Start the main loop for the game."""
 
 		while True:
-			# Watch for keyboard and mouse events,
-			# which are any action user performs while playing the game
-			# listen for events & perform task based on event
-			for event in pygame.event.get():	# pygame.event.get() returns list of events that have
-												# taken place since last time this function was called
-				if event.type == pygame.QUIT:	# player clicked window's close button, detect pygame.QUIT event
-					sys.exit()					# exit the game
+			self._check_events()			# check for & respond to keyboard & mouse events
+			self._update_screen()			# update images on screen & flip to newly updated screen
+			
+	########################################
+	def _check_events(self):
+		"""Helper method to respond to keypresses & mouse events."""
 
-			self.screen.fill(self.bgColor)		# redraw screen during each pass through loop
-			self.ship.blitme()					# After filling background, place image of ship
-												# on top of background.
+		# Watch for keyboard & mouse events,
+		# which are any action user performs while playing the game
+		# listen for events & perform task based on event
+		for event in pygame.event.get():	# pygame.event.get() returns list of events that have
+											# taken place since last time this function was called
+			if event.type == pygame.QUIT:	# player clicked window's close button, detect pygame.QUIT event
+				sys.exit()					# exit the game
 
-			# Make the most recently drawn screen visible.
-			# Update display to show new positions of game elements & hide
-			# old ones, creating illusion of smooth movement
-			pygame.display.flip()
+	########################################
+	def _update_screen(self):
+		"""Helper method to update images on the screen, & flip to the new screen."""
+
+		self.screen.fill(self.bgColor)	# redraw screen during each pass through loop
+		self.ship.blitme()				# After filling background, place image of ship
+										# on top of background.
+
+		# Make the most recently drawn screen visible.
+		# Update display to show new positions of game elements & hide
+		# old ones, creating illusion of smooth movement
+		pygame.display.flip()
 
 #———————————————————————————————————————————————————————————————————————————————
 #———————————————————————————————————————————————————————————————————————————————
