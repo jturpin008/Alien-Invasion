@@ -23,7 +23,7 @@ class Ship:
 
 		# start each new ship at the bottom center of the screen
 		self.rect.midbottom = self.screenRect.midbottom		# match value of screen rect's midbottom attribute
-															# to Ship screen rect's  midbottom attribute
+															# to Ship screen rect's midbottom attribute
 
 	########################################
 	def blitme(self):

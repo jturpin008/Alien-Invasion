@@ -43,10 +43,15 @@ class AlienInvasion:
 		# Watch for keyboard & mouse events,
 		# which are any action user performs while playing the game
 		# listen for events & perform task based on event
-		for event in pygame.event.get():	# pygame.event.get() returns list of events that have
-											# taken place since last time this function was called
-			if event.type == pygame.QUIT:	# player clicked window's close button, detect pygame.QUIT event
-				sys.exit()					# exit the game
+		for event in pygame.event.get():		# pygame.event.get() returns list of events that have
+												# taken place since last time this function was called
+			if event.type == pygame.QUIT:		# player clicked window's close button, detect pygame.QUIT event
+				sys.exit()						# exit the game
+			elif event.type == pygame.KEYDOWN:	# player pressed a key: pygame catches KEYDOWN event
+				if event.key == pygame.K_RIGHT:	# if player pressed right arrow key
+					self.ship.rect.x += 1		# move ship to the right by 1 pixel
+				if event.key == pygame.K_LEFT:	# if player pressed left arrow key
+					self.ship.rect.x -= 1		# move ship to the left by 1 pixel
 
 	########################################
 	def _update_screen(self):
