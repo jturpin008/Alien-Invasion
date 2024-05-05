@@ -25,6 +25,23 @@ class Ship:
 		self.rect.midbottom = self.screenRect.midbottom		# match value of screen rect's midbottom attribute
 															# to Ship screen rect's midbottom attribute
 
+		self.movingRight = False	# initialize movingRight attribute(flag) to false
+		self.movingLeft = False		# initialize movingLeft attribute(flag) to false
+
+	# update() called through instance of Ship, so it's not considered a helper method
+	# Using 2 separate if blocks rather than an elif allows Ship's rect.x value to be increased & then decreased when both
+	# arrow keys are held down. This results in the Ship standing still.
+	# elif for motion to the the left would cause the right arrow key to have priority. This makes movements more accurate
+	# when switching from right to left when the player might momentarily hold down both keys.
+	########################################
+	def update(self):
+		"""Update the ship's position based on the movement flags."""
+
+		if self.movingRight:		# movingRight flag set to true
+			self.rect.x += 1		# move Ship's position to right 1 increment on x-axis
+		if self.movingLeft:			# movingLeft flag set to true
+			self.rect.x -= 1		# move Ship's position to left 1 increment on x-axis
+
 	########################################
 	def blitme(self):
 		"""Draw the ship at its current location."""

@@ -34,6 +34,7 @@ class AlienInvasion:
 
 		while True:
 			self._check_events()			# check for & respond to keyboard & mouse events
+			self.ship.update()				# update ship's position on current pass through loop
 			self._update_screen()			# update images on screen & flip to newly updated screen
 			
 	########################################
@@ -43,15 +44,22 @@ class AlienInvasion:
 		# Watch for keyboard & mouse events,
 		# which are any action user performs while playing the game
 		# listen for events & perform task based on event
-		for event in pygame.event.get():		# pygame.event.get() returns list of events that have
-												# taken place since last time this function was called
-			if event.type == pygame.QUIT:		# player clicked window's close button, detect pygame.QUIT event
-				sys.exit()						# exit the game
-			elif event.type == pygame.KEYDOWN:	# player pressed a key: pygame catches KEYDOWN event
-				if event.key == pygame.K_RIGHT:	# if player pressed right arrow key
-					self.ship.rect.x += 1		# move ship to the right by 1 pixel
-				if event.key == pygame.K_LEFT:	# if player pressed left arrow key
-					self.ship.rect.x -= 1		# move ship to the left by 1 pixel
+		for event in pygame.event.get():			# pygame.event.get() returns list of events that have
+													# taken place since last time this function was called
+			if event.type == pygame.QUIT:			# player clicked window's close button, detect pygame.QUIT event
+				sys.exit()							# exit the game
+			
+			elif event.type == pygame.KEYDOWN:		# player pressed a key: pygame catches KEYDOWN event
+				if event.key == pygame.K_RIGHT:		# if player pressed right arrow key
+					self.ship.movingRight = True	# set ship's movingRight flag to true
+				if event.key == pygame.K_LEFT:		# if player pressed left arrow key
+					self.ship.movingLeft = True		# set ship's movingLeft flag to true
+			
+			elif event.type == pygame.KEYUP:		# player released a pressed key: pygame catches KEYUP event
+				if event.key == pygame.K_RIGHT:		# if player released right arrow key
+					self.ship.movingRight = False	# set ship's movingRight flag to False
+				if event.key == pygame.K_LEFT:		# if player released left arrow key
+					self.ship.movingLeft = False	# set ship's movingLeft flag to false
 
 	########################################
 	def _update_screen(self):
