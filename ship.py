@@ -12,6 +12,7 @@ class Ship:
 
 		self.screen = aiGame.screen					# assign game's screen attribute to Ship's screen attribute
 													# to easily access game's screen in all Ship class methods
+		self.settings = aiGame.settings				# assign game's settings attribute to Ship's settings attribute
 		self.screenRect = aiGame.screen.get_rect()	# assign game's screen rect attribute to Ship's screen rect attribute
 													# to correctly place Ship in correct location on screen
 
@@ -25,6 +26,12 @@ class Ship:
 		self.rect.midbottom = self.screenRect.midbottom		# match value of screen rect's midbottom attribute
 															# to Ship screen rect's midbottom attribute
 
+		# Because we're adjusting the position of the Ship by fractions of a pixel, we need to assign the position to a variable
+		# that can store a decimal value. A decimal value assigned to rect will only keep the integer portion of the value.
+		# To accurately track Ship's position, define a self.x attribute that can hold decimal values
+		# Use float() to convert the value of self.rect.x to a decimal and assign this value to self.x
+		self.x = float(self.rect.x)	# store a decimal value for the Ship's horizontal position
+
 		self.movingRight = False	# initialize movingRight attribute(flag) to false
 		self.movingLeft = False		# initialize movingLeft attribute(flag) to false
 
@@ -37,10 +44,14 @@ class Ship:
 	def update(self):
 		"""Update the ship's position based on the movement flags."""
 
-		if self.movingRight:		# movingRight flag set to true
-			self.rect.x += 1		# move Ship's position to right 1 increment on x-axis
-		if self.movingLeft:			# movingLeft flag set to true
-			self.rect.x -= 1		# move Ship's position to left 1 increment on x-axis
+		# update Ship's x position value
+		if self.movingRight:					# if movingRight flag set to true
+			self.x += self.settings.shipSpeed	# adjust x position by value of (+)shipSpeed
+		if self.movingLeft:						# if movingLeft flag set to true
+			self.x -= self.settings.shipSpeed	# adjust x position by value of (-)shipSpeed
+
+		self.rect.x = self.x					# update Ship's rect.x value with updated self.x value
+												# only integer portion of self.x will be stored in self.rect.x, that's acceptable
 
 	########################################
 	def blitme(self):

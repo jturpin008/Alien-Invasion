@@ -8,3 +8,6 @@ class Settings:
 		self.screenWidth = 1200
 		self.screenHeight = 800
 		self.bgColor = (230, 230, 230)
+
+		# Ship settings
+		self.shipSpeed = 1.5		# Ship's initial speed in pixels/cycle
