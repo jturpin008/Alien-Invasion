@@ -16,10 +16,20 @@ class AlienInvasion:
 		pygame.init()				# initialize all imported Pygame modules
 		self.settings = Settings()	# create instance of Settings & assign it to 'self.settings'
 
+		"""
+		# settings to display game in its own window rather than fullscreen
 		self.screen = pygame.display.set_mode(
 			(self.settings.screenWidth, self.settings.screenHeight))	# create display window (surface) &
 																		# assign to class attribute 'self.screen'
 																		# surface display.set_mode() returns is entire game window
+		"""
+
+		self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)	# tell Pygame to figure out a window size & fill the screen
+																			# because we don't know screen width & height ahead of time,
+																			# update these settings after screen is created
+		self.settings.screenWidth = self.screen.get_rect().width			# use width attribute of screen's rect to update settings object
+		self.settings.screenHeight = self.screen.get_rect().height			# use height attribute of screen's rect to update settings object
+
 		pygame.display.set_caption("Alien Invasion")
 
 		self.bgColor = (self.settings.bgColor)	# set background color
