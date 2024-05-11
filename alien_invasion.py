@@ -50,16 +50,28 @@ class AlienInvasion:
 				sys.exit()							# exit the game
 			
 			elif event.type == pygame.KEYDOWN:		# player pressed a key: pygame catches KEYDOWN event
-				if event.key == pygame.K_RIGHT:		# if player pressed right arrow key
-					self.ship.movingRight = True	# set ship's movingRight flag to true
-				if event.key == pygame.K_LEFT:		# if player pressed left arrow key
-					self.ship.movingLeft = True		# set ship's movingLeft flag to true
+				self._check_keydown_events(event)	# handle the key press event
 			
 			elif event.type == pygame.KEYUP:		# player released a pressed key: pygame catches KEYUP event
-				if event.key == pygame.K_RIGHT:		# if player released right arrow key
-					self.ship.movingRight = False	# set ship's movingRight flag to False
-				if event.key == pygame.K_LEFT:		# if player released left arrow key
-					self.ship.movingLeft = False	# set ship's movingLeft flag to false
+				self._check_keyup_events(event)		# handle the key release event
+
+	########################################
+	def _check_keydown_events(self, event):
+		"""Respond to keypresses."""
+
+		if event.key == pygame.K_RIGHT:		# if player pressed right arrow key
+			self.ship.movingRight = True	# set ship's movingRight flag to true
+		if event.key == pygame.K_LEFT:		# if player pressed left arrow key
+			self.ship.movingLeft = True		# set ship's movingLeft flag to true
+
+	########################################
+	def _check_keyup_events(self, event):
+		"""Respond to key releases."""
+
+		if event.key == pygame.K_RIGHT:		# if player released right arrow key
+			self.ship.movingRight = False	# set ship's movingRight flag to False
+		if event.key == pygame.K_LEFT:		# if player released left arrow key
+			self.ship.movingLeft = False	# set ship's movingLeft flag to false
 
 	########################################
 	def _update_screen(self):
