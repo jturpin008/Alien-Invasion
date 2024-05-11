@@ -44,11 +44,18 @@ class Ship:
 	def update(self):
 		"""Update the ship's position based on the movement flags."""
 
-		# update Ship's x position value
-		if self.movingRight:					# if movingRight flag set to true
-			self.x += self.settings.shipSpeed	# adjust x position by value of (+)shipSpeed
-		if self.movingLeft:						# if movingLeft flag set to true
-			self.x -= self.settings.shipSpeed	# adjust x position by value of (-)shipSpeed
+		# update Ship's x-coordinate value, not the rect
+		# if movingRight flag set to true &
+		# x-coordinate of right edge of the Ship's rect is less than
+		# right edge of screen's rect, Ship hasn't reached right edge of the screen
+		if (self.movingRight) and (self.rect.right < self.screenRect.right):
+			self.x += self.settings.shipSpeed	# adjust Ship's x-coordinate by value of (+)shipSpeed
+		
+		# if movingLeft flag set to true &
+		# x-coordinate of left edge of the Ship's rect is greater than 0
+		# the Ship hasn't reached the left edge of the screen
+		if (self.movingLeft) and (self.rect.left > 0):
+			self.x -= self.settings.shipSpeed	# adjust Ship's x-coordinate by value of (-)shipSpeed
 
 		self.rect.x = self.x					# update Ship's rect.x value with updated self.x value
 												# only integer portion of self.x will be stored in self.rect.x, that's acceptable
