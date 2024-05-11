@@ -61,8 +61,10 @@ class AlienInvasion:
 
 		if event.key == pygame.K_RIGHT:		# if player pressed right arrow key
 			self.ship.movingRight = True	# set ship's movingRight flag to true
-		if event.key == pygame.K_LEFT:		# if player pressed left arrow key
+		elif event.key == pygame.K_LEFT:	# if player pressed left arrow key
 			self.ship.movingLeft = True		# set ship's movingLeft flag to true
+		elif event.key == pygame.K_q:		# if player pressed 'q' key
+			sys.exit()						# exit the game
 
 	########################################
 	def _check_keyup_events(self, event):
@@ -70,7 +72,7 @@ class AlienInvasion:
 
 		if event.key == pygame.K_RIGHT:		# if player released right arrow key
 			self.ship.movingRight = False	# set ship's movingRight flag to False
-		if event.key == pygame.K_LEFT:		# if player released left arrow key
+		elif event.key == pygame.K_LEFT:	# if player released left arrow key
 			self.ship.movingLeft = False	# set ship's movingLeft flag to false
 
 	########################################
