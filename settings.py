@@ -10,4 +10,10 @@ class Settings:
 		self.bgColor = (230, 230, 230)
 
 		# Ship settings
-		self.shipSpeed = 1.5		# Ship's initial speed in pixels/cycle
+		self.shipSpeed = 1.5		# Ship's initial speed in pixels/loop
+
+		# bullet settings
+		self.bulletSpeed = 1.0
+		self.bulletWidth = 3
+		self.bulletHeight = 15
+		self.bulletColor = (60, 60, 60)
