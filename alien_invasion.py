@@ -48,18 +48,10 @@ class AlienInvasion:
 		"""Start the main loop for the game."""
 
 		while True:
-			self._check_events()			# check for & respond to keyboard & mouse events
-			self.ship.update()				# update ship's position on current pass through loop
-			self.grpBullets.update()		# grpBullets.update() calls bullet.update() for each bullet placed in group 'grpBullets'
-
-			# get rid of bullets that have disappeared
-			for bullet in self.grpBullets.copy():	# can't remove items from group(list) within a for loop, loop through copy of group(list)
-													# iterate through each item in copy of group
-				if bullet.rect.bottom <= 0:			# if bottom of current bullet's rect is no longer on the screen
-					self.grpBullets.remove(bullet)	# remove current bullet from 'bullets' group copy
-			#print(len(self.grpBullets))				# print how many bullets remaining
-
-			self._update_screen()			# update images on screen & flip to newly updated screen
+			self._check_events()		# check for & respond to keyboard & mouse events
+			self.ship.update()			# update ship's position on current pass through loop
+			self._update_bullets()		# update position of current bullets & delete old bullets
+			self._update_screen()		# update images on screen & flip to newly updated screen
 			
 	########################################
 	def _check_events(self):
@@ -112,6 +104,20 @@ class AlienInvasion:
 			newBullet = Bullet(self)		# create instance of a bullet
 			self.grpBullets.add(newBullet)	# add newly created bullet to group 'grpBullets'
 											# add() similar to append but written for Pygame groups
+
+	########################################
+	def _update_bullets(self):
+		"""Helper method to update position of bullets & get rid of old bullets."""
+
+		# update bullet positions.
+		self.grpBullets.update()		# grpBullets.update() calls bullet.update() for each bullet placed in group 'grpBullets'
+
+		# get rid of bullets that have disappeared
+		for bullet in self.grpBullets.copy():	# can't remove items from group(list) within a for loop, loop through copy of 'grpBullets'group
+												# iterate through each item in copy of 'grpBullets' group
+			if bullet.rect.bottom <= 0:			# if bottom of current bullet's rect is no longer on the screen
+				self.grpBullets.remove(bullet)	# remove current bullet from original 'grpBullets' group
+		#print(len(self.grpBullets))			# print how many bullets remaining
 
 	########################################
 	def _update_screen(self):
