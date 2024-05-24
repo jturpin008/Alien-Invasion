@@ -107,9 +107,11 @@ class AlienInvasion:
 	def _fire_bullet(self):
 		"""Helper method to create a new bullet and add it to the bullets group."""
 
-		newBullet = Bullet(self)		# create instance of a bullet
-		self.grpBullets.add(newBullet)	# add newly created bullet to group 'grpBullets'
-										# add() similar to append but written for Pygame groups
+		# if bullet count visible on screen is less than quantity desired
+		if len(self.grpBullets) < self.settings.bulletsAllowed:
+			newBullet = Bullet(self)		# create instance of a bullet
+			self.grpBullets.add(newBullet)	# add newly created bullet to group 'grpBullets'
+											# add() similar to append but written for Pygame groups
 
 	########################################
 	def _update_screen(self):
