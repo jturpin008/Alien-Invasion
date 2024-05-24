@@ -51,15 +51,21 @@ class AlienInvasion:
 			self._check_events()			# check for & respond to keyboard & mouse events
 			self.ship.update()				# update ship's position on current pass through loop
 			self.grpBullets.update()		# grpBullets.update() calls bullet.update() for each bullet placed in group 'grpBullets'
+
+			# get rid of bullets that have disappeared
+			for bullet in self.grpBullets.copy():	# can't remove items from group(list) within a for loop, loop through copy of group(list)
+													# iterate through each item in copy of group
+				if bullet.rect.bottom <= 0:			# if bottom of current bullet's rect is no longer on the screen
+					self.grpBullets.remove(bullet)	# remove current bullet from 'bullets' group copy
+			#print(len(self.grpBullets))				# print how many bullets remaining
+
 			self._update_screen()			# update images on screen & flip to newly updated screen
 			
 	########################################
 	def _check_events(self):
 		"""Helper method to respond to keypresses & mouse events."""
 
-		# Watch for keyboard & mouse events,
-		# which are any action user performs while playing the game
-		# listen for events & perform task based on event
+		# Listen for keyboard and/or mouse events & respond accordingly
 		for event in pygame.event.get():			# pygame.event.get() returns list of events that have
 													# taken place since last time this function was called
 			if event.type == pygame.QUIT:			# player clicked window's close button, detect pygame.QUIT event
