@@ -4,6 +4,7 @@ import pygame
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
+from alien import Alien
 
 #———————————————————————————————————————————————————————————————————————————————
 #———————————————————————————————————————————————————————————————————————————————
@@ -20,9 +21,7 @@ class AlienInvasion:
 		
 		# settings to display game in its own window rather than fullscreen
 		self.screen = pygame.display.set_mode(
-			(self.settings.screenWidth, self.settings.screenHeight))	# create display window (surface) &
-																		# assign to class attribute 'self.screen'
-																		# surface display.set_mode() returns is entire game window
+			(self.settings.screenWidth, self.settings.screenHeight))		# initialize game's display window & assign to AlienInvasion's screen attribute
 		
 
 		"""
@@ -42,6 +41,9 @@ class AlienInvasion:
 												# Assign this Ship instance to AlienInvasion's ship attribute.
 		self.grpBullets = pygame.sprite.Group()	# create sprite group to store, manage, & draw all live bullets fired
 												# Group() behaves like a list with extra functionality
+		self.grpAliens = pygame.sprite.Group()	# create sprite group to store, manage, & draw all aliens
+
+		self._create_fleet()
 
 	########################################
 	def run_game(self):
@@ -62,10 +64,8 @@ class AlienInvasion:
 													# taken place since last time this function was called
 			if event.type == pygame.QUIT:			# player clicked window's close button, detect pygame.QUIT event
 				sys.exit()							# exit the game
-			
 			elif event.type == pygame.KEYDOWN:		# player pressed a key: pygame catches KEYDOWN event
 				self._check_keydown_events(event)	# handle the key press event
-			
 			elif event.type == pygame.KEYUP:		# player released a pressed key: pygame catches KEYUP event
 				self._check_keyup_events(event)		# handle the key release event
 
@@ -75,13 +75,10 @@ class AlienInvasion:
 
 		if event.key == pygame.K_RIGHT:		# if player pressed right arrow key
 			self.ship.movingRight = True	# set ship's movingRight flag to true
-
 		elif event.key == pygame.K_LEFT:	# if player pressed left arrow key
 			self.ship.movingLeft = True		# set ship's movingLeft flag to true
-
 		elif event.key == pygame.K_q:		# if player pressed 'q' key
 			sys.exit()						# exit the game
-
 		elif event.key == pygame.K_SPACE:	# if player pressed space bar
 			self._fire_bullet()				# fire the bullet from the ship
 
@@ -91,9 +88,15 @@ class AlienInvasion:
 
 		if event.key == pygame.K_RIGHT:		# if player released right arrow key
 			self.ship.movingRight = False	# set ship's movingRight flag to False
-
 		elif event.key == pygame.K_LEFT:	# if player released left arrow key
 			self.ship.movingLeft = False	# set ship's movingLeft flag to false
+
+	########################################
+	def _create_fleet(self):
+		"""Create the fleet of aliens."""
+
+		alien = Alien(self)			# create new instance of an Alien
+		self.grpAliens.add(alien)	# add newly created alien to grpAliens
 
 	########################################
 	def _fire_bullet(self):
@@ -129,6 +132,9 @@ class AlienInvasion:
 
 		for bullet in self.grpBullets.sprites():	# iterate through each bullet in the group(list) 'grpBullets'
 			bullet.draw_bullet()					# draw the bullet to the screen
+
+		self.grpAliens.draw(self.screen)			# draw sprite(s) in grpAliens group to the screen
+													# at respective position(s) defined by rect attribute(s)
 
 		# Make the most recently drawn screen visible.
 		# Update display to show new positions of game elements & hide
