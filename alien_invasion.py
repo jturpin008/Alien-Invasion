@@ -95,8 +95,27 @@ class AlienInvasion:
 	def _create_fleet(self):
 		"""Create the fleet of aliens."""
 
-		alien = Alien(self)			# create new instance of an Alien
-		self.grpAliens.add(alien)	# add newly created alien to grpAliens
+		# create an alien & find the number of aliens in a row
+		# spacing between each alien is equal to one alien width.
+
+		alien = Alien(self)				# create new instance of Alien for testing purposes
+		alienWidth = alien.rect.width	# define width of an alien as the width of an alien instance's rect
+		availableSpaceX = self.settings.screenWidth - (2 * alienWidth)	# horizontal space available for alien fleet
+																		# minus width of 2 aliens on either side
+		numberAliensX = availableSpaceX // (2 * alienWidth)		# to determine how many alien ships can fit in the horizontal space available
+																# divide available x-axis by width of 2 alien ships (discarding any remainder)
+																# 2 alien ships because empty space between alien ships equals width of an alien ship
+
+		# create first row of aliens
+		for alienNumber in range(numberAliensX):		# iterate through each alien that can be created in the space available
+			# create an alien & place it in the row
+			alien = Alien(self)							# create new instance of Alien
+			alien.x = alienWidth + ((2 * alienWidth) * alienNumber)	# place current alien to the right one alien width from the left margin
+																	# plus the width of an alien multiplied by 2 to account for the alien & the space to its right, also the width of an alien
+																	# multiply all this by the alien's position in the row
+			alien.rect.x = alien.x		# assign alien ship's x-coordinate value to its rect.x value
+										# integer value will be stored, decimal value will be lost, that's ok for now
+			self.grpAliens.add(alien)	# add newly created alien to grpAliens
 
 	########################################
 	def _fire_bullet(self):
