@@ -98,24 +98,57 @@ class AlienInvasion:
 		# create an alien & find the number of aliens in a row
 		# spacing between each alien is equal to one alien width.
 
-		alien = Alien(self)				# create new instance of Alien for testing purposes
-		alienWidth = alien.rect.width	# define width of an alien as the width of an alien instance's rect
+		alien = Alien(self)							# create new instance of Alien for testing purposes
+		alienWidth, alienHeight = alien.rect.size	# define width & height of an alien
+													# rect.size returns tuple with width & height of a rect object
 		availableSpaceX = self.settings.screenWidth - (2 * alienWidth)	# horizontal space available for alien fleet
-																		# minus width of 2 aliens on either side
+																		# subtract width of 2 aliens, 1 on either side
 		numberAliensX = availableSpaceX // (2 * alienWidth)		# to determine how many alien ships can fit in the horizontal space available
 																# divide available x-axis by width of 2 alien ships (discarding any remainder)
-																# 2 alien ships because empty space between alien ships equals width of an alien ship
+																# 2 alien ships because empty space between alien ships equals width of 1 alien ship
 
-		# create first row of aliens
-		for alienNumber in range(numberAliensX):		# iterate through each alien that can be created in the space available
-			# create an alien & place it in the row
-			alien = Alien(self)							# create new instance of Alien
-			alien.x = alienWidth + ((2 * alienWidth) * alienNumber)	# place current alien to the right one alien width from the left margin
-																	# plus the width of an alien multiplied by 2 to account for the alien & the space to its right, also the width of an alien
-																	# multiply all this by the alien's position in the row
-			alien.rect.x = alien.x		# assign alien ship's x-coordinate value to its rect.x value
-										# integer value will be stored, decimal value will be lost, that's ok for now
-			self.grpAliens.add(alien)	# add newly created alien to grpAliens
+		# determine number of rows of aliens that fit on the screen
+		shipHeight = self.ship.rect.height					# define the height of the ship
+		availableSpaceY = (self.settings.screenHeight -
+			(3 * alienHeight) - shipHeight)					# from the height of the entire screen:
+															# subtract 1 alien height from top of screen
+															# subtract 1 ship height from bottom of screen
+															# subtract 2 more alien heights from bottom of screen
+		
+		numberRows = availableSpaceY // (2 * alienHeight)	# because we're dividing available space by the height of the aliens
+															# multiplying alien height by 2 cuts the number of rows in half, just as
+															# multiplying by 3 would cut the number of rows to 1/3
+															# use floor division because we can only make integer number of rows
+
+		# create the full fleet of aliens
+		for rowNumber in range(numberRows):					# iterate through each row of aliens that can be created in the vertical space available
+			for alienNumber in range(numberAliensX):		# iterate through each alien that can be created in the horizontal space available in the current row
+				self._create_alien(alienNumber, rowNumber)	# create an alien & place it in the row
+
+	# param: self reference
+	# param: alien's position from left to right within the current row
+	# param: row on which to place the alien
+	########################################
+	def _create_alien(self, alienNumber, rowNumber):
+		"""Create an alien & place it in the row."""
+
+		alien = Alien(self)								# create new instance of Alien
+		alienWidth, alienHeight = alien.rect.size		# define width & height of an alien
+														# rect.size returns tuple with width & height of a rect object
+		alien.x = alienWidth + ((2 * alienWidth) * alienNumber)	# place current alien to the right one alien width from the left margin
+																# plus the width of an alien multiplied by 2 to account for the alien & the space to its right, also the width of an alien
+																# multiply all this by the alien's position in the row
+
+		alien.rect.x = alien.x		# assign alien ship's x-coordinate value to its rect.x value
+									# integer value will be stored, decimal value will be lost, that's ok for now
+
+		alien.rect.y = (alien.rect.height +
+			((2 * alien.rect.height) * rowNumber))	# pad empty upper border by a height of 1 alien rect
+													# plus the height of 1 alien & the empty space below it also the height of 1 alien
+													# multiplied by the current row number
+
+		self.grpAliens.add(alien)	# add newly created alien to grpAliens
+
 
 	########################################
 	def _fire_bullet(self):

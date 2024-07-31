@@ -3,10 +3,9 @@ import pygame
 class Ship:
 	"""A class to manage the ship."""
 
-	# 2 parameters:
-	#	• self reference
-	# 	• reference to current instance of AlienInvasion class
-	#	  to give 'Ship' access to all game resources defined in AlienInvasion
+	# param: self reference
+	# param: reference to current instance of AlienInvasion class
+	#	     to give 'Ship' access to all game resources defined in AlienInvasion
 	########################################
 	def __init__(self, aiGame):
 		"""Initialize the ship and set its starting position."""

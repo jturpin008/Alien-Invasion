@@ -4,10 +4,9 @@ from pygame.sprite import Sprite
 class Alien(Sprite):
 	"""A class to represent a single alien in the fleet."""
 
-	# 2 parameters:
-	#	• self reference
-	#	• reference to current instance of AlienInvasion class
-	#	  to give Alien access to all resources defined in AlienInvasion
+	# param: self reference
+	# param: reference to current instance of AlienInvasion class
+	#		 to give Alien access to all resources defined in AlienInvasion
 	########################################
 	def __init__(self, aiGame):
 		"""Initialize the alien & set its starting position."""

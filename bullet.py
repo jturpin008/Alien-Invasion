@@ -7,10 +7,9 @@ class Bullet(Sprite):
 	# Note: when using sprites, you can group related elements in your game &
 	# act on all the grouped elements at once
 
-	# 2 parameters:
-	#	• self reference
-	#	• reference to current instance of AlienInvasion class
-	#	  to give 'Bullet' access to all game resources defined in AlienInvasion
+	# param: self reference
+	# param: reference to current instance of AlienInvasion class
+	#		 to give 'Bullet' access to all game resources defined in AlienInvasion
 	########################################
 	def __init__(self, aiGame):
 		"""Create a bullet object at the ship's current position."""
