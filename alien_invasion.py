@@ -42,8 +42,7 @@ class AlienInvasion:
 		self.grpBullets = pygame.sprite.Group()	# create sprite group to store, manage, & draw all live bullets fired
 												# Group() behaves like a list with extra functionality
 		self.grpAliens = pygame.sprite.Group()	# create sprite group to store, manage, & draw all aliens
-
-		self._create_fleet()
+		self._create_fleet()					# create the fleet of aliens
 
 	########################################
 	def run_game(self):
@@ -53,6 +52,7 @@ class AlienInvasion:
 			self._check_events()		# check for & respond to keyboard & mouse events
 			self.ship.update()			# update ship's position on current pass through loop
 			self._update_bullets()		# update position of current bullets & delete old bullets
+			self._update_aliens()		# update the positions of all aliens in the fleet
 			self._update_screen()		# update images on screen & flip to newly updated screen
 			
 	########################################
@@ -173,6 +173,12 @@ class AlienInvasion:
 			if bullet.rect.bottom <= 0:			# if bottom of current bullet's rect is no longer on the screen
 				self.grpBullets.remove(bullet)	# remove current bullet from original 'grpBullets' group
 		#print(len(self.grpBullets))			# print how many bullets remaining
+
+	########################################
+	def _update_aliens(self):
+		"""Helper method to update the positions of all aliens in the fleet."""
+
+		self.grpAliens.update()	# update the positions of all aliens in the fleet
 
 	########################################
 	def _update_screen(self):

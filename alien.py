@@ -14,6 +14,7 @@ class Alien(Sprite):
 		super().__init__()				# call init() from parent class Sprite, granting child class Alien
 										# access to all resources defined in Sprite
 		self.screen = aiGame.screen		# assign game's screen attribute to Alien's screen attribute
+		self.settings = aiGame.settings	# assign game's settings attribute to Alien's settings attribute
 
 		# load the alien image & set its rect attribute
 		self.image = pygame.image.load('images/alien.bmp')	# assign image returned by load() to Alien's image attribute
@@ -24,4 +25,10 @@ class Alien(Sprite):
 		self.rect.y = self.rect.height		# set alien's rect's y-coordinate 1 Alien height away from initial placement (y-origin)
 
 		self.x = float(self.rect.x)			# cast Alien's rect's x-coordinate with float() to get its exact horizontal position &
-											# assign it to Alien's x-coordinate attribute	
+											# assign it to Alien's exact(decimal) x-coordinate attribute
+
+	########################################
+	def update(self):
+		"""Move the alien to the right."""
+		self.x += self.settings.alienSpeed	# move alien ship one increment to the right
+		self.rect.x = self.x				# assign Alien's exact(decimal) x-coordinate attribute to Alien's rect's x-coordinate attribute
