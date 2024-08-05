@@ -44,6 +44,7 @@ class AlienInvasion:
 		self.grpAliens = pygame.sprite.Group()	# create sprite group to store, manage, & draw all aliens
 		self._create_fleet()					# create the fleet of aliens
 
+
 	########################################
 	def run_game(self):
 		"""Start the main loop for the game."""
@@ -55,6 +56,7 @@ class AlienInvasion:
 			self._update_aliens()		# update the positions of all aliens in the fleet
 			self._update_screen()		# update images on screen & flip to newly updated screen
 			
+
 	########################################
 	def _check_events(self):
 		"""Helper method to respond to keypresses & mouse events."""
@@ -69,6 +71,7 @@ class AlienInvasion:
 			elif event.type == pygame.KEYUP:		# player released a pressed key: pygame catches KEYUP event
 				self._check_keyup_events(event)		# handle the key release event
 
+
 	########################################
 	def _check_keydown_events(self, event):
 		"""Helper method to respond to keypresses."""
@@ -82,6 +85,7 @@ class AlienInvasion:
 		elif event.key == pygame.K_SPACE:	# if player pressed space bar
 			self._fire_bullet()				# fire the bullet from the ship
 
+
 	########################################
 	def _check_keyup_events(self, event):
 		"""Helper method to respond to key releases."""
@@ -90,6 +94,7 @@ class AlienInvasion:
 			self.ship.movingRight = False	# set ship's movingRight flag to False
 		elif event.key == pygame.K_LEFT:	# if player released left arrow key
 			self.ship.movingLeft = False	# set ship's movingLeft flag to false
+
 
 	########################################
 	def _create_fleet(self):
@@ -125,6 +130,7 @@ class AlienInvasion:
 			for alienNumber in range(numberAliensX):		# iterate through each alien that can be created in the horizontal space available in the current row
 				self._create_alien(alienNumber, rowNumber)	# create an alien & place it in the row
 
+
 	# param: self reference
 	# param: alien's position from left to right within the current row
 	# param: row on which to place the alien
@@ -151,6 +157,26 @@ class AlienInvasion:
 
 
 	########################################
+	def _check_fleet_edges(self):
+		"""Helper method to respond appropriately if any aliens have reached an edge."""
+
+		for alien in self.grpAliens.sprites():		# iterate through each alien sprite in the sprite group
+			if alien.check_edges():					# if check_edges() returns True, one of current alien's edges is at or beyond the screen edge
+				self._change_fleet_direction()		# change fleet's direction of movement
+				break								# exit the loop
+
+
+	########################################
+	def _change_fleet_direction(self):
+		"""Helper method to drop the entire fleet and change the fleet's direction."""
+
+		for alien in self.grpAliens.sprites():				# iterate through each alien sprite in the sprite group
+			alien.rect.y += self.settings.fleetDropSpeed	# move current alien downward the distance specified by fleetDropSpeed
+
+		self.settings.fleetDirection *= -1					# change value of fleetDirection by multiplying its current value by -1
+
+
+	########################################
 	def _fire_bullet(self):
 		"""Helper method to create a new bullet and add it to the bullets group."""
 
@@ -159,6 +185,7 @@ class AlienInvasion:
 			newBullet = Bullet(self)		# create instance of a bullet
 			self.grpBullets.add(newBullet)	# add newly created bullet to group 'grpBullets'
 											# add() similar to append but written for Pygame groups
+
 
 	########################################
 	def _update_bullets(self):
@@ -174,11 +201,14 @@ class AlienInvasion:
 				self.grpBullets.remove(bullet)	# remove current bullet from original 'grpBullets' group
 		#print(len(self.grpBullets))			# print how many bullets remaining
 
+
 	########################################
 	def _update_aliens(self):
-		"""Helper method to update the positions of all aliens in the fleet."""
+		"""Helper method to check if fleet is at an edge, then update the positions of all aliens in the fleet."""
 
-		self.grpAliens.update()	# update the positions of all aliens in the fleet
+		self._check_fleet_edges()	#
+		self.grpAliens.update()		# update the positions of all aliens in the fleet
+
 
 	########################################
 	def _update_screen(self):

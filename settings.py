@@ -20,4 +20,6 @@ class Settings:
 		self.bulletsAllowed = 3
 
 		# alien settings
-		self.alienSpeed = 1.0
+		self.alienSpeed = 1.0		# speed aliens move on x-axis
+		self.fleetDropSpeed = 10	# speed fleet drops down screen each time an alien reaches either end
+		self.fleetDirection = 1		# 1 == right; -1 == left

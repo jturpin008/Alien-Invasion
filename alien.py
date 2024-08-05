@@ -28,7 +28,21 @@ class Alien(Sprite):
 											# assign it to Alien's exact(decimal) x-coordinate attribute
 
 	########################################
+	def check_edges(self):
+		"""Return True if an alien is at edge of screen."""
+
+		screenRect = self.screen.get_rect()		# assign game's screen rect attribute to variable 'screenRect'
+
+		# if alien's rectangle's right edge attribute is greater than or equal to the right attribute of the screen's rect OR
+		# if alien's rectangle's left edge attribute is less than or equal to 0
+		if (self.rect.right >= screenRect.right) or (self.rect.left <= 0):
+			return True;
+
+	########################################
 	def update(self):
 		"""Move the alien to the right."""
-		self.x += self.settings.alienSpeed	# move alien ship one increment to the right
+		
+		self.x += (self.settings.alienSpeed * self.settings.fleetDirection)	# multiply alien's speed by value of fleetDirection
+																			# if fleetDirection is 1, value of alienSpeed added to alien's current position, moving it right
+																			# if fleedDirection is -1, value of alienSpeed subtracted from alien's position, moving it left
 		self.rect.x = self.x				# assign Alien's exact(decimal) x-coordinate attribute to Alien's rect's x-coordinate attribute
