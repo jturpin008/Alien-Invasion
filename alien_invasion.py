@@ -44,7 +44,6 @@ class AlienInvasion:
 		self.grpAliens = pygame.sprite.Group()	# create sprite group to store, manage, & draw all aliens
 		self._create_fleet()					# create the fleet of aliens
 
-
 	########################################
 	def run_game(self):
 		"""Start the main loop for the game."""
@@ -56,7 +55,6 @@ class AlienInvasion:
 			self._update_aliens()		# update the positions of all aliens in the fleet
 			self._update_screen()		# update images on screen & flip to newly updated screen
 			
-
 	########################################
 	def _check_events(self):
 		"""Helper method to respond to keypresses & mouse events."""
@@ -71,7 +69,6 @@ class AlienInvasion:
 			elif event.type == pygame.KEYUP:		# player released a pressed key: pygame catches KEYUP event
 				self._check_keyup_events(event)		# handle the key release event
 
-
 	########################################
 	def _check_keydown_events(self, event):
 		"""Helper method to respond to keypresses."""
@@ -85,7 +82,6 @@ class AlienInvasion:
 		elif event.key == pygame.K_SPACE:	# if player pressed space bar
 			self._fire_bullet()				# fire the bullet from the ship
 
-
 	########################################
 	def _check_keyup_events(self, event):
 		"""Helper method to respond to key releases."""
@@ -94,7 +90,6 @@ class AlienInvasion:
 			self.ship.movingRight = False	# set ship's movingRight flag to False
 		elif event.key == pygame.K_LEFT:	# if player released left arrow key
 			self.ship.movingLeft = False	# set ship's movingLeft flag to false
-
 
 	########################################
 	def _create_fleet(self):
@@ -155,7 +150,6 @@ class AlienInvasion:
 
 		self.grpAliens.add(alien)	# add newly created alien to grpAliens
 
-
 	########################################
 	def _check_fleet_edges(self):
 		"""Helper method to respond appropriately if any aliens have reached an edge."""
@@ -164,7 +158,6 @@ class AlienInvasion:
 			if alien.check_edges():					# if check_edges() returns True, one of current alien's edges is at or beyond the screen edge
 				self._change_fleet_direction()		# change fleet's direction of movement
 				break								# exit the loop
-
 
 	########################################
 	def _change_fleet_direction(self):
@@ -175,7 +168,6 @@ class AlienInvasion:
 
 		self.settings.fleetDirection *= -1					# change value of fleetDirection by multiplying its current value by -1
 
-
 	########################################
 	def _fire_bullet(self):
 		"""Helper method to create a new bullet and add it to the bullets group."""
@@ -185,7 +177,6 @@ class AlienInvasion:
 			newBullet = Bullet(self)		# create instance of a bullet
 			self.grpBullets.add(newBullet)	# add newly created bullet to group 'grpBullets'
 											# add() similar to append but written for Pygame groups
-
 
 	########################################
 	def _update_bullets(self):
@@ -199,16 +190,19 @@ class AlienInvasion:
 												# iterate through each item in copy of 'grpBullets' group
 			if bullet.rect.bottom <= 0:			# if bottom of current bullet's rect is no longer on the screen
 				self.grpBullets.remove(bullet)	# remove current bullet from original 'grpBullets' group
-		#print(len(self.grpBullets))			# print how many bullets remaining
-
+		
+		# check for any bullets that have hit aliens
+		# if so, get rid of the bulle & the alien
+		collisions = pygame.sprite.groupcollide(
+			self.grpBullets, self.grpAliens, True, True)	# create dictionary with each collision of a bullet's rect(key) & alien's rect(value)
+															# destroying both the bullet & the alien upon collision & assign to 'collisons' variable
 
 	########################################
 	def _update_aliens(self):
 		"""Helper method to check if fleet is at an edge, then update the positions of all aliens in the fleet."""
 
-		self._check_fleet_edges()	#
+		self._check_fleet_edges()	# respond appropriately when the fleet hits a screen edge
 		self.grpAliens.update()		# update the positions of all aliens in the fleet
-
 
 	########################################
 	def _update_screen(self):
