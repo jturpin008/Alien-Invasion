@@ -190,9 +190,14 @@ class AlienInvasion:
 												# iterate through each item in copy of 'grpBullets' group
 			if bullet.rect.bottom <= 0:			# if bottom of current bullet's rect is no longer on the screen
 				self.grpBullets.remove(bullet)	# remove current bullet from original 'grpBullets' group
-		
-		# check for any bullets that have hit aliens
-		# if so, get rid of the bulle & the alien
+	
+		self._check_bullet_alien_collisions()
+
+	########################################
+	def _check_bullet_alien_collisions(self):
+		"""Helper method to respond to bullet-alien collisions."""
+
+		# Remove any bullets & aliens that have collided
 		collisions = pygame.sprite.groupcollide(
 			self.grpBullets, self.grpAliens, True, True)	# create dictionary with each collision of a bullet's rect(key) & alien's rect(value)
 															# destroying both the bullet & the alien upon collision & assign to 'collisons' variable
