@@ -215,6 +215,10 @@ class AlienInvasion:
 		self._check_fleet_edges()	# respond appropriately when the fleet hits a screen edge
 		self.grpAliens.update()		# update the positions of all aliens in the fleet
 
+		# look for alien-ship collisions
+		if pygame.sprite.spritecollideany(self.ship, self.grpAliens):
+			print("Ship hit!!!")
+
 	########################################
 	def _update_screen(self):
 		"""Helper method to update images on the screen, & flip to the new screen."""
