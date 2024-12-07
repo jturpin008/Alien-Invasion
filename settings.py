@@ -11,6 +11,7 @@ class Settings:
 
 		# Ship settings
 		self.shipSpeed = 1.5		# Ship's initial speed in pixels/loop
+		self.shipLimit = 3
 
 		# bullet settings
 		self.bulletSpeed = 1.0

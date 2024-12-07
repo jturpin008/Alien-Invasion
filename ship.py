@@ -3,9 +3,10 @@ import pygame
 class Ship:
 	"""A class to manage the ship."""
 
-	# param: self reference
-	# param: reference to current instance of AlienInvasion class
-	#	     to give 'Ship' access to all game resources defined in AlienInvasion
+	# 2 parameters 
+	#	• self reference
+	#	• reference to current instance of AlienInvasion class
+	#	  to give 'Ship' access to all game resources defined in AlienInvasion
 	########################################
 	def __init__(self, aiGame):
 		"""Initialize the ship and set its starting position."""
@@ -65,3 +66,10 @@ class Ship:
 		"""Draw the ship at its current location."""
 
 		self.screen.blit(self.image, self.rect)
+
+	########################################
+	def center_ship(self):
+		"""Center the ship on the screen."""
+
+		self.rect.midbottom = self.screenRect.midbottom
+		self.x = float(self.rect.x)			# reset ship's exact position attribute
