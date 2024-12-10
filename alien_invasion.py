@@ -53,9 +53,12 @@ class AlienInvasion:
 
 		while True:
 			self._check_events()		# check for & respond to keyboard & mouse events
-			self.ship.update()			# update ship's position on current pass through loop
-			self._update_bullets()		# update position of current bullets & delete old bullets
-			self._update_aliens()		# update the positions of all aliens in the fleet
+
+			if self.gameStats.gameActive == True:
+				self.ship.update()			# update ship's position on current pass through loop
+				self._update_bullets()		# update position of current bullets & delete old bullets
+				self._update_aliens()		# update the positions of all aliens in the fleet
+				
 			self._update_screen()		# update images on screen & flip to newly updated screen
 			
 	########################################
@@ -215,19 +218,22 @@ class AlienInvasion:
 	def _ship_hit(self):
 		"""Helper method to respond to the ship being hit by an alien."""
 
-		# decrement shipsLeft
-		self.gameStats.shipsLeft -= 1
+		if self.gameStats.shipsLeft > 0:
+			# decrement shipsLeft
+			self.gameStats.shipsLeft -= 1
 
-		# get rid of any remaining aliens & bullets
-		self.grpAliens.empty()
-		self.grpBullets.empty()
+			# get rid of any remaining aliens & bullets
+			self.grpAliens.empty()
+			self.grpBullets.empty()
 
-		# create a new fleet & center the ship
-		self._create_fleet()
-		self.ship.center_ship()
+			# create a new fleet & center the ship
+			self._create_fleet()
+			self.ship.center_ship()
 
-		# pause
-		sleep(0.5)
+			# pause
+			sleep(0.5)
+		else:
+			self.gameStats.gameActive = False
 
 	########################################
 	def _update_aliens(self):
