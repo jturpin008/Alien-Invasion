@@ -7,6 +7,7 @@ from game_stats import GameStats
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from button import Button
 
 #———————————————————————————————————————————————————————————————————————————————
 #———————————————————————————————————————————————————————————————————————————————
@@ -37,7 +38,7 @@ class AlienInvasion:
 
 		pygame.display.set_caption("Alien Invasion")
 
-		self.bgColor = (self.settings.bgColor)	# set background color
+		self.bgColor = self.settings.bgColor	# set background color
 		self.ship = Ship(self)					# Make instance of Ship after screen has been created
 												# passing instance of AlienInvasion as an argument.
 												# This parameter gives Ship access to game's resources like the screen object.
@@ -46,6 +47,9 @@ class AlienInvasion:
 												# Group() behaves like a list with extra functionality
 		self.grpAliens = pygame.sprite.Group()	# create sprite group to store, manage, & draw all aliens
 		self._create_fleet()					# create the fleet of aliens
+
+		# make the play button
+		self.playButton = Button(self, "Play")
 
 	########################################
 	def run_game(self):
@@ -274,6 +278,10 @@ class AlienInvasion:
 
 		self.grpAliens.draw(self.screen)			# draw sprite(s) in grpAliens group to the screen
 													# at respective position(s) defined by rect attribute(s)
+
+		# draw the play button if the game is inactive
+		if not self.gameStats.gameActive:
+			self.playButton.draw_button()
 
 		# Make the most recently drawn screen visible.
 		# Update display to show new positions of game elements & hide
