@@ -70,14 +70,17 @@ class AlienInvasion:
 		"""Helper method to respond to keypresses & mouse events."""
 
 		# Listen for keyboard and/or mouse events & respond accordingly
-		for event in pygame.event.get():			# pygame.event.get() returns list of events that have
-													# taken place since last time this function was called
-			if event.type == pygame.QUIT:			# player clicked window's close button, detect pygame.QUIT event
-				sys.exit()							# exit the game
-			elif event.type == pygame.KEYDOWN:		# player pressed a key: pygame catches KEYDOWN event
-				self._check_keydown_events(event)	# handle the key press event
-			elif event.type == pygame.KEYUP:		# player released a pressed key: pygame catches KEYUP event
-				self._check_keyup_events(event)		# handle the key release event
+		for event in pygame.event.get():				# pygame.event.get() returns list of events that have
+														# taken place since last time this function was called
+			if event.type == pygame.QUIT:				# player clicked window's close button, detect pygame.QUIT event
+				sys.exit()								# exit the game
+			elif event.type == pygame.KEYDOWN:			# player pressed a key, pygame catches KEYDOWN event
+				self._check_keydown_events(event)		# handle the key press event
+			elif event.type == pygame.KEYUP:			# player released a pressed key: pygame catches KEYUP event
+				self._check_keyup_events(event)			# handle the key release event
+			elif event.type == pygame.MOUSEBUTTONDOWN:	# player pressed a mouse button, pygame catches a MOUSEBUTTONDOWN event
+				mousePos = pygame.mouse.get_pos()		# determine mouse cursor's x- & y-coordinates when mouse button pressed
+				self._check_play_button(mousePos)
 
 	########################################
 	def _check_keydown_events(self, event):
@@ -100,6 +103,13 @@ class AlienInvasion:
 			self.ship.movingRight = False	# set ship's movingRight flag to False
 		elif event.key == pygame.K_LEFT:	# if player released left arrow key
 			self.ship.movingLeft = False	# set ship's movingLeft flag to false
+
+	########################################
+	def _check_play_button(self, mousePos):
+		"""Start a new game when the player clicks Play."""
+
+		if self.playButton.rect.collidepoint(mousePos):	# if mouse pointer overlaps with button rect when clicked
+			self.gameStats.gameActive = True 			# activate the game
 
 	########################################
 	def _create_fleet(self):
