@@ -108,7 +108,10 @@ class AlienInvasion:
 	def _check_play_button(self, mousePos):
 		"""Start a new game when the player clicks Play."""
 
-		if self.playButton.rect.collidepoint(mousePos):	# if mouse pointer overlaps with button rect when clicked
+		buttonClicked = self.playButton.rect.collidepoint(mousePos)
+		
+		if buttonClicked and not self.gameStats.gameActive:	# if mouse pointer overlaps with button rect
+															# when clicked & game is not currently active
 			# reset game statistics
 			self.gameStats.reset_stats()		# reset game stats, returning player's extra lives
 			self.gameStats.gameActive = True 	# set game status to active
