@@ -109,7 +109,17 @@ class AlienInvasion:
 		"""Start a new game when the player clicks Play."""
 
 		if self.playButton.rect.collidepoint(mousePos):	# if mouse pointer overlaps with button rect when clicked
-			self.gameStats.gameActive = True 			# activate the game
+			# reset game statistics
+			self.gameStats.reset_stats()		# reset game stats, returning player's extra lives
+			self.gameStats.gameActive = True 	# set game status to active
+
+			# get rid of any remaining aliens & bullets
+			self.grpAliens.empty()				# remove all remaining aliens from the group
+			self.grpBullets.empty()				# remove all remaining bullets from the group
+
+			# create a new fleet & center the ship
+			self._create_fleet()
+			self.ship.center_ship()
 
 	########################################
 	def _create_fleet(self):
@@ -237,8 +247,8 @@ class AlienInvasion:
 			self.gameStats.shipsLeft -= 1
 
 			# get rid of any remaining aliens & bullets
-			self.grpAliens.empty()
-			self.grpBullets.empty()
+			self.grpAliens.empty()		# remove all remaining alien sprites from the group
+			self.grpBullets.empty()		# remove all remaining bullet sprites from the group
 
 			# create a new fleet & center the ship
 			self._create_fleet()
