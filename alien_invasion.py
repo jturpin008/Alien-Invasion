@@ -21,13 +21,11 @@ class AlienInvasion:
 		pygame.init()						# initialize all imported Pygame modules
 		self.settings = Settings()			# create instance of Settings class & assign it to game's settings attribute
 		self.gameStats = GameStats(self)	# create instance of GameStats class & assign it to game's gameStats attribute
-
 		
 		# settings to display game in its own window rather than fullscreen
 		self.screen = pygame.display.set_mode(
 			(self.settings.screenWidth, self.settings.screenHeight))		# initialize game's display window & assign to AlienInvasion's screen attribute
 		
-
 		"""
 		self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)	# tell Pygame to figure out a window size & fill the screen
 																			# because we don't know screen width & height ahead of time,
@@ -56,14 +54,14 @@ class AlienInvasion:
 		"""Start the main loop for the game."""
 
 		while True:
-			self._check_events()		# check for & respond to keyboard & mouse events
+			self._check_events()					# check for & respond to keyboard & mouse events
 
-			if self.gameStats.gameActive == True:
-				self.ship.update()			# update ship's position on current pass through loop
-				self._update_bullets()		# update position of current bullets & delete old bullets
-				self._update_aliens()		# update the positions of all aliens in the fleet
+			if self.gameStats.gameActive == True:	# if game is active
+				self.ship.update()					# update ship's position on current pass through loop
+				self._update_bullets()				# update position of current bullets & delete old bullets
+				self._update_aliens()				# update position of aliens in the fleet
 				
-			self._update_screen()		# update images on screen & flip to newly updated screen
+			self._update_screen()					# update images on screen & flip to newly updated screen
 			
 	########################################
 	def _check_events(self):
@@ -82,6 +80,8 @@ class AlienInvasion:
 				mousePos = pygame.mouse.get_pos()		# determine mouse cursor's x- & y-coordinates when mouse button pressed
 				self._check_play_button(mousePos)
 
+	# • self reference
+	# • pygame event
 	########################################
 	def _check_keydown_events(self, event):
 		"""Helper method to respond to keypresses."""
@@ -90,11 +90,17 @@ class AlienInvasion:
 			self.ship.movingRight = True	# set ship's movingRight flag to true
 		elif event.key == pygame.K_LEFT:	# if player pressed left arrow key
 			self.ship.movingLeft = True		# set ship's movingLeft flag to true
+		elif event.key == pygame.K_p:		# if player pressed 'p' key to start the game
+			self._start_game()				# start a new game
+		elif event.key == pygame.K_r:		# if player pressed 'r' key to reset the game
+			self._start_game(True)			# reset the game
 		elif event.key == pygame.K_q:		# if player pressed 'q' key
 			sys.exit()						# exit the game
 		elif event.key == pygame.K_SPACE:	# if player pressed space bar
 			self._fire_bullet()				# fire the bullet from the ship
 
+	# • self reference
+	# • pygame event
 	########################################
 	def _check_keyup_events(self, event):
 		"""Helper method to respond to key releases."""
@@ -104,6 +110,8 @@ class AlienInvasion:
 		elif event.key == pygame.K_LEFT:	# if player released left arrow key
 			self.ship.movingLeft = False	# set ship's movingLeft flag to false
 
+	# • self reference
+	# • tuple of x/y mouse coordinates
 	########################################
 	def _check_play_button(self, mousePos):
 		"""Start a new game when the player clicks Play."""
@@ -112,6 +120,18 @@ class AlienInvasion:
 
 		if buttonClicked and not self.gameStats.gameActive:	# if mouse pointer overlaps with button rect
 															# when clicked & game is not currently active
+			self._start_game()	# start a new game
+
+	# • self reference
+	# • bool reset value defaulted to false
+	########################################
+	def _start_game(self, reset=False):
+		"""Start a new game."""
+
+		if reset == True:						# if user
+			self.gameStats.gameActive = False
+
+		if self.gameStats.gameActive == False:
 			# reset game statistics
 			self.gameStats.reset_stats()		# reset game stats, returning player's extra lives
 			self.gameStats.gameActive = True 	# set game status to active
@@ -162,16 +182,16 @@ class AlienInvasion:
 				self._create_alien(alienNumber, rowNumber)	# create an alien & place it in the row
 
 
-	# param: self reference
-	# param: alien's position from left to right within the current row
-	# param: row on which to place the alien
+	# • self reference
+	# • alien's position from left to right within the current row
+	# • row on which to place the alien
 	########################################
 	def _create_alien(self, alienNumber, rowNumber):
 		"""Create an alien & place it in the row."""
 
-		alien = Alien(self)								# create new instance of Alien
-		alienWidth, alienHeight = alien.rect.size		# define width & height of an alien
-														# rect.size returns tuple with width & height of a rect object
+		alien = Alien(self)							# create new instance of Alien
+		alienWidth, alienHeight = alien.rect.size	# define width & height of an alien
+													# rect.size returns tuple with width & height of a rect object
 		alien.x = alienWidth + ((2 * alienWidth) * alienNumber)	# place current alien to the right one alien width from the left margin
 																# plus the width of an alien multiplied by 2 to account for the alien & the space to its right, also the width of an alien
 																# multiply all this by the alien's position in the row
@@ -310,9 +330,8 @@ class AlienInvasion:
 		if not self.gameStats.gameActive:
 			self.playButton.draw_button()
 
-		# Make the most recently drawn screen visible.
-		# Update display to show new positions of game elements & hide
-		# old ones, creating illusion of smooth movement
+		# Make the most recently drawn screen visible. Update display to show new
+		# positions of game elements & hide old ones, creating illusion of smooth movement
 		pygame.display.flip()
 
 #———————————————————————————————————————————————————————————————————————————————
