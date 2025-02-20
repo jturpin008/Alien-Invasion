@@ -120,7 +120,9 @@ class AlienInvasion:
 
 		if buttonClicked and not self.gameStats.gameActive:	# if mouse pointer overlaps with button rect
 															# when clicked & game is not currently active
-			self._start_game()	# start a new game
+			# reset game settings & start a new game
+			self.settings.initialize_dynamic_settings()
+			self._start_game()
 
 	# • self reference
 	# • bool reset value defaulted to false
@@ -258,11 +260,13 @@ class AlienInvasion:
 			self.grpBullets, self.grpAliens, True, True)	# create dictionary with each collision of a bullet's rect(key) & alien's rect(value)
 															# destroying both the bullet & the alien upon collision & assign to 'collisons' variable
 
-		if not self.grpAliens:			# if the user has destroyed the entire fleet of aliens,
-										# the group is empty & evaluates to false
-			# destroy existing bullets & create new fleet
-			self.grpBullets.empty()		# remove all remaining bullet sprites from the group
-			self._create_fleet()		# create a new fleet of aliens
+		if not self.grpAliens:	# if the user has destroyed the entire fleet of aliens,
+								# the group is empty & evaluates to false
+
+			# delete existing bullets, create new fleet, & increase speeds
+			self.grpBullets.empty()			# remove all remaining bullet sprites from the group
+			self._create_fleet()			# create a new fleet of aliens
+			self.settings.increase_speed()	# increase speed of ship, fleet, & bullets
 
 	########################################
 	def _ship_hit(self):
