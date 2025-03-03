@@ -8,19 +8,20 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from button import Button
+from scoreboard import Scoreboard
 
 #———————————————————————————————————————————————————————————————————————————————
 #———————————————————————————————————————————————————————————————————————————————
 class AlienInvasion:
-	"""Overall class to manage game assets and behavior."""
+	"""Overall class to manage game assets & behavior."""
 
 	########################################
 	def __init__(self):
-		"""Initialize the game, and create game resources."""
+		"""Initialize the game, & create game resources."""
 
 		pygame.init()						# initialize all imported Pygame modules
 		self.settings = Settings()			# create instance of Settings class & assign it to game's settings attribute
-		self.gameStats = GameStats(self)	# create instance of GameStats class & assign it to game's gameStats attribute
+		self.stats = GameStats(self)		# create instance of GameStats class & assign it to game's stats attribute
 		
 		# settings to display game in its own window rather than fullscreen
 		self.screen = pygame.display.set_mode(
@@ -49,6 +50,9 @@ class AlienInvasion:
 		# make the play button
 		self.playButton = Button(self, "Play")
 
+		# make the scoreboard
+		self.scoreboard = Scoreboard(self)
+
 	########################################
 	def run_game(self):
 		"""Start the main loop for the game."""
@@ -56,7 +60,7 @@ class AlienInvasion:
 		while True:
 			self._check_events()					# check for & respond to keyboard & mouse events
 
-			if self.gameStats.gameActive == True:	# if game is active
+			if self.stats.gameActive == True:	# if game is active
 				self.ship.update()					# update ship's position on current pass through loop
 				self._update_bullets()				# update position of current bullets & delete old bullets
 				self._update_aliens()				# update position of aliens in the fleet
@@ -118,7 +122,7 @@ class AlienInvasion:
 
 		buttonClicked = self.playButton.rect.collidepoint(mousePos)
 
-		if buttonClicked and not self.gameStats.gameActive:	# if mouse pointer overlaps with button rect
+		if buttonClicked and not self.stats.gameActive:		# if mouse pointer overlaps with button rect
 															# when clicked & game is not currently active
 			# reset game settings & start a new game
 			self.settings.initialize_dynamic_settings()
@@ -131,12 +135,12 @@ class AlienInvasion:
 		"""Start a new game."""
 
 		if reset == True:						# if user
-			self.gameStats.gameActive = False
+			self.stats.gameActive = False
 
-		if self.gameStats.gameActive == False:
+		if self.stats.gameActive == False:
 			# reset game statistics
-			self.gameStats.reset_stats()		# reset game stats, returning player's extra lives
-			self.gameStats.gameActive = True 	# set game status to active
+			self.stats.reset_stats()		# reset game stats, returning player's extra lives
+			self.stats.gameActive = True 	# set game status to active
 
 			# get rid of any remaining aliens & bullets
 			self.grpAliens.empty()				# remove all remaining aliens from the group
@@ -272,9 +276,9 @@ class AlienInvasion:
 	def _ship_hit(self):
 		"""Helper method to respond to the ship being hit by an alien."""
 
-		if self.gameStats.shipsLeft > 0:
+		if self.stats.shipsLeft > 0:
 			# decrement shipsLeft
-			self.gameStats.shipsLeft -= 1
+			self.stats.shipsLeft -= 1
 
 			# get rid of any remaining aliens & bullets
 			self.grpAliens.empty()		# remove all remaining alien sprites from the group
@@ -287,7 +291,7 @@ class AlienInvasion:
 			# pause
 			sleep(0.5)
 		else:
-			self.gameStats.gameActive = False
+			self.stats.gameActive = False
 			pygame.mouse.set_visible(True)		# unhide the mouse cursor
 
 	########################################
@@ -330,8 +334,11 @@ class AlienInvasion:
 		self.grpAliens.draw(self.screen)			# draw sprite(s) in grpAliens group to the screen
 													# at respective position(s) defined by rect attribute(s)
 
+		# draw the score information
+		self.scoreboard.show_score()
+
 		# draw the play button if the game is inactive
-		if not self.gameStats.gameActive:
+		if not self.stats.gameActive:
 			self.playButton.draw_button()
 
 		# Make the most recently drawn screen visible. Update display to show new
