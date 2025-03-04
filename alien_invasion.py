@@ -264,6 +264,10 @@ class AlienInvasion:
 			self.grpBullets, self.grpAliens, True, True)	# create dictionary with each collision of a bullet's rect(key) & alien's rect(value)
 															# destroying both the bullet & the alien upon collision & assign to 'collisons' variable
 
+		if collisions:	# if a bullet has collided with an alien ship
+			self.stats.score += self.settings.alienPoints
+			self.scoreboard.prep_score()
+
 		if not self.grpAliens:	# if the user has destroyed the entire fleet of aliens,
 								# the group is empty & evaluates to false
 
