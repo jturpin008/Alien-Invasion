@@ -124,6 +124,12 @@ class AlienInvasion:
 
 		if buttonClicked and not self.stats.gameActive:		# if mouse pointer overlaps with button rect
 															# when clicked & game is not currently active
+			# reset the game statistics
+			self.stats.reset_stats()
+
+			self.stats.gameActive = True
+			self.scoreboard.prep_score()
+
 			# reset game settings & start a new game
 			self.settings.initialize_dynamic_settings()
 			self._start_game()
@@ -134,7 +140,7 @@ class AlienInvasion:
 	def _start_game(self, reset=False):
 		"""Start a new game."""
 
-		if reset == True:						# if user
+		if reset == True:
 			self.stats.gameActive = False
 
 		if self.stats.gameActive == False:
@@ -264,9 +270,10 @@ class AlienInvasion:
 			self.grpBullets, self.grpAliens, True, True)	# create dictionary with each collision of a bullet's rect(key) & alien's rect(value)
 															# destroying both the bullet & the alien upon collision & assign to 'collisons' variable
 
-		if collisions:	# if a bullet has collided with an alien ship
-			self.stats.score += self.settings.alienPoints
-			self.scoreboard.prep_score()
+		# if a bullet has collided with an alien ship
+		if collisions:
+			self.stats.score += self.settings.alienPoints	# add value of destroying an alien to score
+			self.scoreboard.prep_score()					# render image of the new score
 
 		if not self.grpAliens:	# if the user has destroyed the entire fleet of aliens,
 								# the group is empty & evaluates to false
