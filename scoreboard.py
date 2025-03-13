@@ -25,7 +25,9 @@ class Scoreboard:
 	def prep_score(self):
 		"""Turn the score into a rendered image."""
 
-		scoreStr = str(self.stats.score)
+		roundedScore = round(self.stats.score, -1)	# -1 rounds to nearest 10, -2 rounds to nearest 100... etc.
+		scoreStr = "{:,}".format(roundedScore)		# insert commas into numbers when converting numerical value to string
+
 		self.scoreImage = self.font.render(scoreStr, True,
 				self.textColor, self.settings.bgColor)
 
