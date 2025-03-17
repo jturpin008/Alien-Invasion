@@ -146,11 +146,12 @@ class AlienInvasion:
 		if self.stats.gameActive == False:
 			# reset game statistics
 			self.stats.reset_stats()		# reset game stats, returning player's extra lives
+			self.scoreboard.prep_score()	# render the zeroed scoreboard
 			self.stats.gameActive = True 	# set game status to active
 
 			# get rid of any remaining aliens & bullets
-			self.grpAliens.empty()				# remove all remaining aliens from the group
-			self.grpBullets.empty()				# remove all remaining bullets from the group
+			self.grpAliens.empty()
+			self.grpBullets.empty()
 
 			# create a new fleet & center the ship
 			self._create_fleet()
@@ -272,8 +273,16 @@ class AlienInvasion:
 
 		# if a bullet has collided with an alien ship
 		if collisions:
-			self.stats.score += self.settings.alienPoints	# add value of destroying an alien to score
-			self.scoreboard.prep_score()					# render image of the new score
+
+			# because a single bullet can collide with more than one alien
+			# iterate through each alien(value) in dictionary key/value pairs returned by collisions
+			for aliens in collisions.values():
+				# add to the score the value of the alien hit multiplied by the number of aliens hit by the bullet
+				# each value is a list of alien(s) hit by the bullet
+				self.stats.score += self.settings.alienPoints * len(aliens)
+
+			self.scoreboard.prep_score()		# render image of the current score
+			self.scoreboard.check_high_score()	# check for a new high score
 
 		if not self.grpAliens:	# if the user has destroyed the entire fleet of aliens,
 								# the group is empty & evaluates to false

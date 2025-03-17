@@ -18,8 +18,9 @@ class Scoreboard:
 		self.textColor = (30, 30, 30)
 		self.font = pygame.font.SysFont(None, 48)
 
-		# prepare the initial score image
+		# prepare the initial score images
 		self.prep_score()
+		self.prep_high_score()
 
 	########################################
 	def prep_score(self):
@@ -37,7 +38,31 @@ class Scoreboard:
 		self.scoreRect.top = 20
 
 	########################################
+	def prep_high_score(self):
+		"""Turn the high score into a rendered image."""
+
+		highScore = round(self.stats.highScore, -1)	# round high score to nearest 10
+		highScoreStr = "{:,}".format(highScore)		# format high score with commas
+		
+		self.highScoreImage = self.font.render(highScoreStr, True,
+				self.textColor, self.settings.bgColor)
+
+		# center the high score at the top of the screen
+		self.highScoreRect = self.highScoreImage.get_rect()
+		self.highScoreRect.centerx = self.screenRect.centerx
+		self.highScoreRect.top = self.screenRect.top
+
+	########################################
 	def show_score(self):
 		"""Draw score to the screen"""
 
 		self.screen.blit(self.scoreImage, self.scoreRect)
+		self.screen.blit(self.highScoreImage, self.highScoreRect)
+
+	########################################
+	def check_high_score(self):
+		"""Check to see if there's a new high score."""
+
+		if self.stats.score > self.stats.highScore:
+			self.stats.highScore = self.stats.score
+			self.prep_high_score()
