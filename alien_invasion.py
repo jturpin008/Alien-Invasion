@@ -128,7 +128,8 @@ class AlienInvasion:
 			self.stats.reset_stats()
 
 			self.stats.gameActive = True
-			self.scoreboard.prep_score()
+			self.scoreboard.prep_score()	# render image of the score
+			self.sb.prep_level()			# render image of the level
 
 			# reset game settings & start a new game
 			self.settings.initialize_dynamic_settings()
@@ -291,6 +292,10 @@ class AlienInvasion:
 			self.grpBullets.empty()			# remove all remaining bullet sprites from the group
 			self._create_fleet()			# create a new fleet of aliens
 			self.settings.increase_speed()	# increase speed of ship, fleet, & bullets
+
+			# increase level
+			self.stats.level += 1			# increment the level
+			self.scoreboard.prep_level()	# render image of the current score
 
 	########################################
 	def _ship_hit(self):
