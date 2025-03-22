@@ -1,6 +1,7 @@
 import pygame
+from pygame.sprite import Sprite
 
-class Ship:
+class Ship(Sprite):
 	"""A class to manage the ship."""
 
 	# 2 parameters 
@@ -10,6 +11,9 @@ class Ship:
 	########################################
 	def __init__(self, aiGame):
 		"""Initialize the ship and set its starting position."""
+
+		#Sprite.__int__(self)	# parent class constructor
+		super().__init__()		# parent class constructor
 
 		self.screen = aiGame.screen					# assign game's screen attribute to Ship's screen attribute
 													# to easily access game's screen in all Ship class methods

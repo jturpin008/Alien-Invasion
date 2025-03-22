@@ -1,4 +1,7 @@
 import pygame.font
+from pygame.sprite import Group
+
+from ship import Ship
 
 class Scoreboard:
 	"""A class to report scoring information."""
@@ -9,6 +12,7 @@ class Scoreboard:
 	def __init__(self, aiGame):
 		"""Initialize scorekeeping attributes"""
 
+		self.aiGame = aiGame
 		self.screen = aiGame.screen
 		self.screenRect = self.screen.get_rect()
 		self.settings = aiGame.settings
@@ -22,6 +26,7 @@ class Scoreboard:
 		self.prep_score()
 		self.prep_high_score()
 		self.prep_level()
+		self.prep_ships()
 
 	########################################
 	def prep_score(self):
@@ -67,12 +72,25 @@ class Scoreboard:
 		self.levelRect.top = self.scoreRect.bottom + 10
 
 	########################################
+	def prep_ships(self):
+		"""Show how many ships are left."""
+
+		self.grpShips = Group()		# empty group of self.ships
+
+		for shipNumber in range(self.stats.shipsLeft):	# iterate through the player's remaining ships
+			ship = Ship(self.aiGame)					# create new instance of a ship
+			ship.rect.x = 10 + (shipNumber * ship.rect.width)
+			ship.rect.y = 10
+			self.grpShips.add(ship)						# add current ship to the group
+
+	########################################
 	def show_score(self):
-		"""Draw scores & level to the screen"""
+		"""Draw scores, level, & ships to the screen."""
 
 		self.screen.blit(self.scoreImage, self.scoreRect)
 		self.screen.blit(self.highScoreImage, self.highScoreRect)
 		self.screen.blit(self.levelImage, self.levelRect)
+		self.grpShips.draw(self.screen)
 
 	########################################
 	def check_high_score(self):

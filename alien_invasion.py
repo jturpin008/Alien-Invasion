@@ -129,10 +129,12 @@ class AlienInvasion:
 
 			self.stats.gameActive = True
 			self.scoreboard.prep_score()	# render image of the score
-			self.sb.prep_level()			# render image of the level
+			self.scoreboard.prep_level()	# render image of the level
+			self.scoreboard.prep_ships()	# render image(s) of remaining extra ship(s)
 
 			# reset game settings & start a new game
 			self.settings.initialize_dynamic_settings()
+			print(f"Alien speed: {self.settings.alienSpeed}")
 			self._start_game()
 
 	# • self reference
@@ -147,7 +149,10 @@ class AlienInvasion:
 		if self.stats.gameActive == False:
 			# reset game statistics
 			self.stats.reset_stats()		# reset game stats, returning player's extra lives
+			self.settings.initialize_dynamic_settings()
 			self.scoreboard.prep_score()	# render the zeroed scoreboard
+			self.scoreboard.prep_level()	# render the zeroed level
+			self.scoreboard.prep_ships()
 			self.stats.gameActive = True 	# set game status to active
 
 			# get rid of any remaining aliens & bullets
@@ -302,8 +307,9 @@ class AlienInvasion:
 		"""Helper method to respond to the ship being hit by an alien."""
 
 		if self.stats.shipsLeft > 0:
-			# decrement shipsLeft
+			# decrement shipsLef & update scoreboard
 			self.stats.shipsLeft -= 1
+			self.scoreboard.prep_ships()	# render image(s) of remaining extra ship(s)
 
 			# get rid of any remaining aliens & bullets
 			self.grpAliens.empty()		# remove all remaining alien sprites from the group
