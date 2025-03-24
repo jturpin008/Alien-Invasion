@@ -134,7 +134,6 @@ class AlienInvasion:
 
 			# reset game settings & start a new game
 			self.settings.initialize_dynamic_settings()
-			print(f"Alien speed: {self.settings.alienSpeed}")
 			self._start_game()
 
 	# • self reference
