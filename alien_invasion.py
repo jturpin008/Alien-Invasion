@@ -66,6 +66,15 @@ class AlienInvasion:
 				self._update_aliens()				# update position of aliens in the fleet
 				
 			self._update_screen()					# update images on screen & flip to newly updated screen
+
+	########################################
+	def _end_game(self):
+		"""Write the high score to a file & exit the game."""
+
+		with open(self.stats.highScoreFile, 'w') as fileObject:
+			fileObject.write(str(self.stats.highScore))
+
+		sys.exit()
 			
 	########################################
 	def _check_events(self):
@@ -75,7 +84,7 @@ class AlienInvasion:
 		for event in pygame.event.get():				# pygame.event.get() returns list of events that have
 														# taken place since last time this function was called
 			if event.type == pygame.QUIT:				# player clicked window's close button, detect pygame.QUIT event
-				sys.exit()								# exit the game
+				self._end_game()						# exit the game
 			elif event.type == pygame.KEYDOWN:			# player pressed a key, pygame catches KEYDOWN event
 				self._check_keydown_events(event)		# handle the key press event
 			elif event.type == pygame.KEYUP:			# player released a pressed key: pygame catches KEYUP event
@@ -99,7 +108,7 @@ class AlienInvasion:
 		elif event.key == pygame.K_r:		# if player pressed 'r' key to reset the game
 			self._start_game(True)			# reset the game
 		elif event.key == pygame.K_q:		# if player pressed 'q' key
-			sys.exit()						# exit the game
+			self._end_game()				# exit the game
 		elif event.key == pygame.K_SPACE:	# if player pressed space bar
 			self._fire_bullet()				# fire the bullet from the ship
 
@@ -128,9 +137,7 @@ class AlienInvasion:
 			self.stats.reset_stats()
 
 			self.stats.gameActive = True
-			self.scoreboard.prep_score()	# render image of the score
-			self.scoreboard.prep_level()	# render image of the level
-			self.scoreboard.prep_ships()	# render image(s) of remaining extra ship(s)
+			self.scoreboard.prep_images()	# render images of score, high score, level, & remaining ships
 
 			# reset game settings & start a new game
 			self.settings.initialize_dynamic_settings()
@@ -149,9 +156,7 @@ class AlienInvasion:
 			# reset game statistics
 			self.stats.reset_stats()		# reset game stats, returning player's extra lives
 			self.settings.initialize_dynamic_settings()
-			self.scoreboard.prep_score()	# render the zeroed scoreboard
-			self.scoreboard.prep_level()	# render the zeroed level
-			self.scoreboard.prep_ships()
+			self.scoreboard.prep_images()	# render images of score, high score, level, & remaining ships
 			self.stats.gameActive = True 	# set game status to active
 
 			# get rid of any remaining aliens & bullets
@@ -289,17 +294,21 @@ class AlienInvasion:
 			self.scoreboard.prep_score()		# render image of the current score
 			self.scoreboard.check_high_score()	# check for a new high score
 
-		if not self.grpAliens:	# if the user has destroyed the entire fleet of aliens,
-								# the group is empty & evaluates to false
+		if not self.grpAliens:			# if user has destroyed entire alien fleet, the group is empty & evaluates to false
+			self._start_new_level()
 
-			# delete existing bullets, create new fleet, & increase speeds
-			self.grpBullets.empty()			# remove all remaining bullet sprites from the group
-			self._create_fleet()			# create a new fleet of aliens
-			self.settings.increase_speed()	# increase speed of ship, fleet, & bullets
+	########################################
+	def _start_new_level(self):
+		"""Start a new level after clearing the last one."""
 
-			# increase level
-			self.stats.level += 1			# increment the level
-			self.scoreboard.prep_level()	# render image of the current score
+		# delete existing bullets, create new fleet, & increase speeds
+		self.grpBullets.empty()			# remove all remaining bullet sprites from the group
+		self._create_fleet()			# create a new fleet of aliens
+		self.settings.increase_speed()	# increase speed of ship, fleet, & bullets
+
+		# increase level
+		self.stats.level += 1			# increment the level
+		self.scoreboard.prep_level()	# render image of the current score
 
 	########################################
 	def _ship_hit(self):
