@@ -20,6 +20,7 @@ class AlienInvasion:
 		"""Initialize the game, & create game resources."""
 
 		pygame.init()						# initialize all imported Pygame modules
+		pygame.mixer.init()					# initialize the audio mixer module
 		self.settings = Settings()			# create instance of Settings class & assign it to game's settings attribute
 		self.stats = GameStats(self)		# create instance of GameStats class & assign it to game's stats attribute
 		
@@ -52,6 +53,9 @@ class AlienInvasion:
 
 		# make the scoreboard
 		self.scoreboard = Scoreboard(self)
+
+		self.shipFire = pygame.mixer.Sound('audio/ship_fire.mp3')
+		self.alienExplosion = pygame.mixer.Sound('audio/alien_explosion.mp3')
 
 	########################################
 	def run_game(self):
@@ -111,6 +115,7 @@ class AlienInvasion:
 			self._end_game()				# exit the game
 		elif event.key == pygame.K_SPACE:	# if player pressed space bar
 			self._fire_bullet()				# fire the bullet from the ship
+			self.shipFire.play()
 
 	# • self reference
 	# • pygame event
@@ -291,6 +296,7 @@ class AlienInvasion:
 				# each value is a list of alien(s) hit by the bullet
 				self.stats.score += self.settings.alienPoints * len(aliens)
 
+			self.alienExplosion.play()			# play audio of alien explosion
 			self.scoreboard.prep_score()		# render image of the current score
 			self.scoreboard.check_high_score()	# check for a new high score
 

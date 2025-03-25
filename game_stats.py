@@ -41,7 +41,5 @@ class GameStats:
 
 		if contents != '':
 			self.highScore = int(contents)
-			print(f"High score: {self.highScore}")
 		else:
-			print("High score file empty")
 			self.highScore = 0
